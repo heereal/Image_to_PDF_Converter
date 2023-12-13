@@ -93,4 +93,23 @@ router.post("/pdf", function (req, res, next) {
   res.send(`/pdf/${pdfName}`);
 });
 
+router.get("/new", function (req, res, next) {
+  // delete the files stored in the session
+  let filenames = req.session.imagefiles;
+
+  let deleteFiles = async (paths) => {
+    let deleting = paths.map((file) =>
+      fs.promises.unlink(path.join(__dirname, "..", `/public/images/${file}`))
+    );
+    await Promise.all(deleting);
+  };
+  deleteFiles(filenames);
+
+  // remove the data from the session
+  req.session.imagefiles = undefined;
+
+  // redirect to the root URL
+  res.redirect("/");
+});
+
 module.exports = router;
