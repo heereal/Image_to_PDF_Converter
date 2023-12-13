@@ -98,6 +98,7 @@ router.get("/new", function (req, res, next) {
   let filenames = req.session.imagefiles;
 
   let deleteFiles = async (paths) => {
+    if (!paths) return;
     let deleting = paths.map((file) =>
       fs.promises.unlink(path.join(__dirname, "..", `/public/images/${file}`))
     );
